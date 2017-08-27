@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".chapter1.DownloadActivity" />
-        <activity android:name=".chapter2.BufferActivity"></activity>
+        <activity android:name=".chapter2.BufferActivity" />
+        <activity android:name=".chapter3.SearchActivity"></activity>
     </application>
 
 </manifest>

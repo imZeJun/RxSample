@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> titles = new ArrayList<>();
         titles.add("(1) 后台执行耗时操作，实时通知 UI 更新");
         titles.add("(2) 计算一段时间内数据的平均值");
+        titles.add("(3) 搜索优化");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);

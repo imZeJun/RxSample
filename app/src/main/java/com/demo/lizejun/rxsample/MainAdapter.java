@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.demo.lizejun.rxsample.chapter1.DownloadActivity;
 import com.demo.lizejun.rxsample.chapter2.BufferActivity;
+import com.demo.lizejun.rxsample.chapter3.SearchActivity;
 import com.demo.lizejun.rxsample.utils.Utils;
 
 import java.util.ArrayList;
@@ -44,6 +45,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         break;
                     case 1:
                         Utils.startActivity(v.getContext(), BufferActivity.class);
+                        break;
+                    case 2:
+                        Utils.startActivity(v.getContext(), SearchActivity.class);
                     default:
                         break;
                 }
