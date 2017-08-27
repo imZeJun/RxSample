@@ -6,7 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.demo.lizejun.rxsample.chapter1.BackgroundActivity;
+import com.demo.lizejun.rxsample.chapter1.DownloadActivity;
+import com.demo.lizejun.rxsample.chapter2.BufferActivity;
 import com.demo.lizejun.rxsample.utils.Utils;
 
 import java.util.ArrayList;
@@ -39,8 +40,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 int position = holder.getAdapterPosition();
                 switch (position) {
                     case 0:
-                        Utils.startActivity(v.getContext(), BackgroundActivity.class);
+                        Utils.startActivity(v.getContext(), DownloadActivity.class);
                         break;
+                    case 1:
+                        Utils.startActivity(v.getContext(), BufferActivity.class);
                     default:
                         break;
                 }

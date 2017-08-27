@@ -20,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_main);
         List<String> titles = new ArrayList<>();
-        titles.add("chapter1 background work");
+        titles.add("(1) 后台执行耗时操作，实时通知 UI 更新");
+        titles.add("(2) 计算一段时间内数据的平均值");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/tv_download"
-        android:text="startDownload"
+        android:text="开始下载"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>

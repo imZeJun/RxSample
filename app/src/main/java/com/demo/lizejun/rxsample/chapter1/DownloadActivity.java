@@ -14,7 +14,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class BackgroundActivity extends AppCompatActivity {
+public class DownloadActivity extends AppCompatActivity {
 
     private TextView mTvDownload;
     private TextView mTvDownloadResult;
@@ -59,23 +59,23 @@ public class BackgroundActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Integer value) {
-                Log.d("BackgroundActivity", "onNext=" + value);
-                mTvDownloadResult.setText("Current Progress=" + value);
+                Log.d("DownloadActivity", "onNext=" + value);
+                mTvDownloadResult.setText("当前下载进度：" + value);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("BackgroundActivity", "onError=" + e);
-                mTvDownloadResult.setText("Download Error");
+                Log.d("DownloadActivity", "onError=" + e);
+                mTvDownloadResult.setText("下载失败");
             }
 
             @Override
             public void onComplete() {
-                Log.d("BackgroundActivity", "onComplete");
-                mTvDownloadResult.setText("Download onComplete");
+                Log.d("DownloadActivity", "onComplete");
+                mTvDownloadResult.setText("下载成功");
             }
         };
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(disposableObserver);
+        observable.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread()).subscribe(disposableObserver);
         mCompositeDisposable.add(disposableObserver);
     }
 
