@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.demo.lizejun.rxsample.chapter1.BackgroundActivity;
+import com.demo.lizejun.rxsample.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +39,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 int position = holder.getAdapterPosition();
                 switch (position) {
                     case 0:
+                        Utils.startActivity(v.getContext(), BackgroundActivity.class);
                         break;
                     default:
                         break;
