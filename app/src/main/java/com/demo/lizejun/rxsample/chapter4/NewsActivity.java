@@ -4,14 +4,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.demo.lizejun.rxsample.R;
 import com.demo.lizejun.rxsample.network.entity.NewsApi;
 import com.demo.lizejun.rxsample.network.entity.NewsEntity;
 import com.demo.lizejun.rxsample.network.entity.NewsResultEntity;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -52,6 +59,7 @@ public class NewsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         mNewsAdapter = new NewsAdapter(mNewsResultEntities);
         recyclerView.setAdapter(mNewsAdapter);
+        refreshArticle(++mCurrentPage);
     }
 
     private void refreshArticle(int page) {
@@ -66,12 +74,8 @@ public class NewsActivity extends AppCompatActivity {
                     @Override
                     public List<NewsResultEntity> apply(NewsEntity androidEntity, NewsEntity iosEntity) throws Exception {
                         List<NewsResultEntity> result = new ArrayList<>();
-                        for (NewsResultEntity entity : androidEntity.getResults()) {
-                            result.add(entity);
-                        }
-                        for (NewsResultEntity entity : iosEntity.getResults()) {
-                            result.add(entity);
-                        }
+                        result.addAll(androidEntity.getResults());
+                        result.addAll(iosEntity.getResults());
                         return result;
                     }
                 });
@@ -82,15 +86,15 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void onNext(List<NewsResultEntity> value) {
                 mNewsResultEntities.clear();
-                for (NewsResultEntity result : value) {
-                    mNewsResultEntities.add(result);
-                }
+                mNewsResultEntities.addAll(value);
                 mNewsAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                if (e instanceof UnknownHostException) {
+                    Toast.makeText(NewsActivity.this, "无网络连接", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
