@@ -10,6 +10,7 @@ import com.demo.lizejun.rxsample.chapter1.DownloadActivity;
 import com.demo.lizejun.rxsample.chapter2.BufferActivity;
 import com.demo.lizejun.rxsample.chapter3.SearchActivity;
 import com.demo.lizejun.rxsample.chapter4.NewsActivity;
+import com.demo.lizejun.rxsample.chapter5.PollingActivity;
 import com.demo.lizejun.rxsample.utils.Utils;
 
 import java.util.ArrayList;
@@ -52,6 +53,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         break;
                     case 3:
                         Utils.startActivity(v.getContext(), NewsActivity.class);
+                        break;
+                    case 4:
+                        Utils.startActivity(v.getContext(), PollingActivity.class);
+                        break;
                     default:
                         break;
                 }
