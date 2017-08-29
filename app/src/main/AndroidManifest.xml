@@ -22,7 +22,8 @@
         <activity android:name=".chapter2.BufferActivity" />
         <activity android:name=".chapter3.SearchActivity" />
         <activity android:name=".chapter4.NewsActivity" />
-        <activity android:name=".chapter5.PollingActivity"></activity>
+        <activity android:name=".chapter5.PollingActivity" />
+        <activity android:name=".chapter6.RetryActivity"></activity>
     </application>
 
 </manifest>

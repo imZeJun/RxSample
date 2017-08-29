@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(3) 搜索优化");
         titles.add("(4) 使用 Retrofit 加载数据");
         titles.add("(5) 简单及进阶的轮询操作");
+        titles.add("(6) 基于错误类型的重试操作");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);
