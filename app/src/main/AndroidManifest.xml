@@ -23,7 +23,8 @@
         <activity android:name=".chapter3.SearchActivity" />
         <activity android:name=".chapter4.NewsActivity" />
         <activity android:name=".chapter5.PollingActivity" />
-        <activity android:name=".chapter6.RetryActivity"></activity>
+        <activity android:name=".chapter6.RetryActivity" />
+        <activity android:name=".chapter7.CombineLatestActivity"></activity>
     </application>
 
 </manifest>

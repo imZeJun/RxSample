@@ -72,6 +72,8 @@ public class RetryActivity extends AppCompatActivity {
 
         }).retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
 
+            private int mRetryCount;
+
             @Override
             public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
                 return throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
@@ -90,8 +92,9 @@ public class RetryActivity extends AppCompatActivity {
                             default:
                                 break;
                         }
-                        Log.d(TAG, "发生错误，等待时间=" + waitTime);
-                        return waitTime > 0 ? Observable.timer(waitTime, TimeUnit.MILLISECONDS) : Observable.error(throwable);
+                        Log.d(TAG, "发生错误，尝试等待时间=" + waitTime + ",当前重试次数=" + mRetryCount);
+                        mRetryCount++;
+                        return waitTime > 0 && mRetryCount <= 4 ? Observable.timer(waitTime, TimeUnit.MILLISECONDS) : Observable.error(throwable);
                     }
 
                 });
