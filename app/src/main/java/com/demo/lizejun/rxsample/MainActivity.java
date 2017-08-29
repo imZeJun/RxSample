@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(4) 使用 Retrofit 加载数据");
         titles.add("(5) 简单及进阶的轮询操作");
         titles.add("(6) 基于错误类型的重试操作");
+        titles.add("(7) 基于 combineLatest 实现的输入验证监听");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);

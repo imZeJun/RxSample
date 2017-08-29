@@ -2,6 +2,8 @@ package com.demo.lizejun.rxsample.chapter7;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,13 +36,15 @@ public class CombineLatestActivity extends AppCompatActivity {
         mBtLogin = (Button) findViewById(R.id.bt_login);
         mNameSubject = PublishSubject.create();
         mPasswordSubject = PublishSubject.create();
-        Observable observable = Observable.combineLatest(mNameSubject, mPasswordSubject, new BiFunction<String, String, Boolean>() {
+        mEtName.addTextChangedListener(new EditTextMonitor(mNameSubject));
+        mEtPassword.addTextChangedListener(new EditTextMonitor(mPasswordSubject));
+        Observable<Boolean> observable = Observable.combineLatest(mNameSubject, mPasswordSubject, new BiFunction<String, String, Boolean>() {
 
             @Override
             public Boolean apply(String name, String password) throws Exception {
                 int nameLen = name.length();
                 int passwordLen = password.length();
-                return nameLen > 2 && nameLen < 15 && passwordLen > 8 && passwordLen < 16;
+                return nameLen >= 2 && nameLen <= 8 && passwordLen >= 4 && passwordLen <= 16;
             }
 
         });
@@ -48,7 +52,7 @@ public class CombineLatestActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Boolean value) {
-                mBtLogin.setEnabled(value);
+                mBtLogin.setText(value ? "登录" : "用户名或密码无效");
             }
 
             @Override
@@ -62,7 +66,38 @@ public class CombineLatestActivity extends AppCompatActivity {
             }
 
         };
+        observable.subscribe(disposable);
         mCompositeDisposable = new CompositeDisposable();
         mCompositeDisposable.add(disposable);
+    }
+
+    private class EditTextMonitor implements TextWatcher {
+
+        private PublishSubject<String> mPublishSubject;
+
+        EditTextMonitor(PublishSubject<String> publishSubject) {
+            mPublishSubject = publishSubject;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            mPublishSubject.onNext(s.toString());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCompositeDisposable.clear();
     }
 }
