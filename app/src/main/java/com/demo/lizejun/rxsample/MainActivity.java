@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(5) 简单及进阶的轮询操作");
         titles.add("(6) 基于错误类型的重试操作");
         titles.add("(7) 基于 combineLatest 实现的输入验证监听");
+        titles.add("(8) 如何实现带有缓存的网络请求");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);

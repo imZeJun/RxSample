@@ -24,7 +24,8 @@
         <activity android:name=".chapter4.NewsActivity" />
         <activity android:name=".chapter5.PollingActivity" />
         <activity android:name=".chapter6.RetryActivity" />
-        <activity android:name=".chapter7.CombineLatestActivity"></activity>
+        <activity android:name=".chapter7.CombineLatestActivity" />
+        <activity android:name=".chapter8.CacheActivity"></activity>
     </application>
 
 </manifest>

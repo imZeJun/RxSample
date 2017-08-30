@@ -13,6 +13,7 @@ import com.demo.lizejun.rxsample.chapter4.NewsActivity;
 import com.demo.lizejun.rxsample.chapter5.PollingActivity;
 import com.demo.lizejun.rxsample.chapter6.RetryActivity;
 import com.demo.lizejun.rxsample.chapter7.CombineLatestActivity;
+import com.demo.lizejun.rxsample.chapter8.CacheActivity;
 import com.demo.lizejun.rxsample.utils.Utils;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_main_adapter_item, parent, false);
+        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_news_item, parent, false);
         return new MainViewHolder(rootView);
     }
 
@@ -64,6 +65,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         break;
                     case 6:
                         Utils.startActivity(v.getContext(), CombineLatestActivity.class);
+                        break;
+                    case 7:
+                        Utils.startActivity(v.getContext(), CacheActivity.class);
                         break;
                     default:
                         break;

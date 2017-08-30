@@ -1,4 +1,4 @@
-package com.demo.lizejun.rxsample.chapter4;
+package com.demo.lizejun.rxsample.network.entity;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.demo.lizejun.rxsample.R;
-import com.demo.lizejun.rxsample.network.entity.NewsResultEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 

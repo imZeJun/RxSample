@@ -4,21 +4,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.demo.lizejun.rxsample.R;
+import com.demo.lizejun.rxsample.network.entity.NewsAdapter;
 import com.demo.lizejun.rxsample.network.entity.NewsApi;
 import com.demo.lizejun.rxsample.network.entity.NewsEntity;
 import com.demo.lizejun.rxsample.network.entity.NewsResultEntity;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.demo.lizejun.rxsample.chapter8.CacheActivity">
+    <Button
+        android:id="@+id/bt_contact_refresh"
+        android:text="使用contact实现"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_contact_eager_refresh"
+        android:text="使用contactEager实现"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_merge_refresh"
+        android:text="使用merge实现"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_publish_refresh"
+        android:text="使用publish实现"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_news"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
