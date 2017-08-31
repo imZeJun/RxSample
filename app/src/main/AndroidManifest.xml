@@ -25,7 +25,8 @@
         <activity android:name=".chapter5.PollingActivity" />
         <activity android:name=".chapter6.RetryActivity" />
         <activity android:name=".chapter7.CombineLatestActivity" />
-        <activity android:name=".chapter8.CacheActivity"></activity>
+        <activity android:name=".chapter8.CacheActivity" />
+        <activity android:name=".chapter9.TimeActivity"></activity>
     </application>
 
 </manifest>

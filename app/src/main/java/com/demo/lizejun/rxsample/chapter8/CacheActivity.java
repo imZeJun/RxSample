@@ -98,11 +98,11 @@ public class CacheActivity extends AppCompatActivity {
     }
 
     private void refreshArticleUsePublish() {
-        Observable<List<NewsResultEntity>> publishObservable = getNetworkArticle(2000).subscribeOn(Schedulers.io()).publish(new Function<Observable<List<NewsResultEntity>>, ObservableSource<List<NewsResultEntity>>>() {
+        Observable<List<NewsResultEntity>> publishObservable = getNetworkArticle(500).subscribeOn(Schedulers.io()).publish(new Function<Observable<List<NewsResultEntity>>, ObservableSource<List<NewsResultEntity>>>() {
 
             @Override
             public ObservableSource<List<NewsResultEntity>> apply(Observable<List<NewsResultEntity>> network) throws Exception {
-                return Observable.merge(network, getCacheArticle(500).subscribeOn(Schedulers.io()).takeUntil(network));
+                return Observable.merge(network, getCacheArticle(2000).subscribeOn(Schedulers.io()).takeUntil(network));
             }
 
         });

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.demo.lizejun.rxsample.chapter9.TimeActivity">
+    <Button
+        android:id="@+id/bt_time_1"
+        android:text="延迟 1s 后执行一个任务，然后结束"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_time_2"
+        android:text="每隔 1s 执行一次任务，第一次任务执行前有 1s 的间隔，执行无限次"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_time_3"
+        android:text="每隔 1s 执行一次任务，立即执行第一次任务，执行无限次"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_time_4"
+        android:text="每隔 1s 执行一次任务，立即执行第一次任务，只执行五次"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/bt_time_5"
+        android:text="先执行一个任务，等待 1s，再执行另一个任务，然后结束"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+</LinearLayout>

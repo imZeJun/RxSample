@@ -14,6 +14,7 @@ import com.demo.lizejun.rxsample.chapter5.PollingActivity;
 import com.demo.lizejun.rxsample.chapter6.RetryActivity;
 import com.demo.lizejun.rxsample.chapter7.CombineLatestActivity;
 import com.demo.lizejun.rxsample.chapter8.CacheActivity;
+import com.demo.lizejun.rxsample.chapter9.TimeActivity;
 import com.demo.lizejun.rxsample.utils.Utils;
 
 import java.util.ArrayList;
@@ -68,6 +69,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         break;
                     case 7:
                         Utils.startActivity(v.getContext(), CacheActivity.class);
+                        break;
+                    case 8:
+                        Utils.startActivity(v.getContext(), TimeActivity.class);
                         break;
                     default:
                         break;
