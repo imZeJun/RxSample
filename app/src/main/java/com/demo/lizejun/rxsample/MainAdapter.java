@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.demo.lizejun.rxsample.chapter1.DownloadActivity;
+import com.demo.lizejun.rxsample.chapter10.RotationPersistActivity;
 import com.demo.lizejun.rxsample.chapter2.BufferActivity;
 import com.demo.lizejun.rxsample.chapter3.SearchActivity;
 import com.demo.lizejun.rxsample.chapter4.NewsActivity;
@@ -72,6 +73,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         break;
                     case 8:
                         Utils.startActivity(v.getContext(), TimeActivity.class);
+                        break;
+                    case 9:
+                        Utils.startActivity(v.getContext(), RotationPersistActivity.class);
                         break;
                     default:
                         break;

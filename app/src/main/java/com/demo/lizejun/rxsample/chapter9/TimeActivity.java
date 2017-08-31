@@ -95,13 +95,15 @@ public class TimeActivity extends AppCompatActivity {
 
     //每隔 1s 执行一次任务，立即执行第一次任务，只执行五次
     private void startTimeDemo4() {
+        Log.d(TAG, "startTimeDemo4");
         DisposableObserver<Long> disposableObserver = getTimeDemoObserver();
-        Observable.intervalRange(0, 5, 0, 1000, TimeUnit.MILLISECONDS).subscribe(disposableObserver);
+        Observable.interval(0, 1000, TimeUnit.MILLISECONDS).take(5).subscribe(disposableObserver);
         mCompositeDisposable.add(disposableObserver);
     }
 
     //先执行一个任务，等待 1s，再执行另一个任务，然后结束
     private void startTimeDemo5() {
+        Log.d(TAG, "startTimeDemo5");
         DisposableObserver<Long> disposableObserver = getTimeDemoObserver();
         Observable.just(0L).doOnNext(new Consumer<Long>() {
 
