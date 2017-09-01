@@ -1,8 +1,9 @@
 package com.demo.lizejun.rxsample.chapter10;
 
 
-import io.reactivex.Flowable;
+import io.reactivex.observables.ConnectableObservable;
 
 public interface IHolder {
-    public void setWorker(Flowable<Integer> workerFlow);
+    public void onWorkerPrepared(ConnectableObservable<Long> workerFlow);
 }
+

@@ -1,7 +1,6 @@
 package com.demo.lizejun.rxsample.chapter10;
 
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.demo.lizejun.rxsample.R;
-import org.reactivestreams.Subscription;
-import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.subscribers.DisposableSubscriber;
+import io.reactivex.observables.ConnectableObservable;
+import io.reactivex.observers.DisposableObserver;
 
 public class RotationPersistActivity extends AppCompatActivity implements IHolder {
 
@@ -43,61 +41,68 @@ public class RotationPersistActivity extends AppCompatActivity implements IHolde
     }
 
     @Override
-    public void setWorker(Flowable<Integer> workerFlow) {
-        DisposableSubscriber<Integer> disposableObserver = new DisposableSubscriber<Integer>() {
+    public void onWorkerPrepared(ConnectableObservable<Long> workerSource) {
+        DisposableObserver<Long> disposableObserver = new DisposableObserver<Long>() {
 
             @Override
-            public void onNext(Integer integer) {
-                Log.d(TAG, "disposableObserver onNext");
-                mTvResult.setText("integer=" + integer);
+            public void onNext(Long aLong) {
+                mTvResult.setText("当前进度=" + aLong);
             }
 
             @Override
             public void onError(Throwable throwable) {
-                Log.d(TAG, "disposableObserver onError");
+                onWorkerFinished();
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, "disposableObserver onError");
+                onWorkerFinished();
             }
+
         };
-        workerFlow.doOnSubscribe(new Consumer<Subscription>() {
-
-            @Override
-            public void accept(Subscription subscription) throws Exception {
-                Log.d(TAG, "disposableObserver doOnSubscribe");
-                subscription.request(100);
-            }
-
-        }).subscribe(disposableObserver);
+        workerSource.observeOn(AndroidSchedulers.mainThread()).subscribe(disposableObserver);
         mCompositeDisposable.add(disposableObserver);
     }
 
     private void startWorker() {
-        Fragment worker = getWorkerFragment();
+        WorkerFragment worker = getWorkerFragment();
         if (worker == null) {
             addWorkerFragment();
         } else {
-            Log.d(TAG, "startWorker, workerFragment 已经存在");
+            Log.d(TAG, "WorkerFragment has attach");
         }
+    }
+    
+    private void onWorkerFinished() {
+        removeWorkerFragment();
     }
 
     private void addWorkerFragment() {
+        WorkerFragment workerFragment = new WorkerFragment();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(new WorkerFragment(), WorkerFragment.TAG);
+        transaction.add(workerFragment, WorkerFragment.TAG);
         transaction.commit();
     }
 
-    private Fragment getWorkerFragment() {
+    private void removeWorkerFragment() {
+        WorkerFragment workerFragment = getWorkerFragment();
+        if (workerFragment != null) {
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.remove(workerFragment);
+            transaction.commit();
+        }
+    }
+
+    private WorkerFragment getWorkerFragment() {
         FragmentManager manager = getSupportFragmentManager();
-        return manager.findFragmentByTag(WorkerFragment.TAG);
+        return (WorkerFragment) manager.findFragmentByTag(WorkerFragment.TAG);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         mCompositeDisposable.clear();
     }
 }
