@@ -28,6 +28,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import retrofit2.Retrofit;
@@ -46,7 +47,7 @@ public class WeatherActivity extends AppCompatActivity {
     private CompositeDisposable mCompositeDisposable;
     private TextView mTvNetworkResult;
     private PublishSubject<Boolean> mNetStatusPublish;
-    private PublishSubject<Long> mCityIdPublish;
+    private ConnectableObservable<Long> mCityPublish;
     private BroadcastReceiver mReceiver;
     private long mCacheCity = -1;
 
@@ -56,16 +57,13 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detector);
         mTvNetworkResult = (TextView) findViewById(R.id.tv_network_result);
         mNetStatusPublish = PublishSubject.create();
-        mCityIdPublish = PublishSubject.create();
         mCompositeDisposable = new CompositeDisposable();
         registerBroadcast();
         startWeatherObserver();
     }
 
     private void startWeatherObserver() {
-        getCityObservable().subscribe(mCityIdPublish);
-        getNetStatusObservable().subscribe(mCityIdPublish);
-        mCityIdPublish.flatMap(new Function<Long, ObservableSource<WeatherEntity>>() {
+        Observable.merge(getCityObservable(), getNetStatusObservable()).flatMap(new Function<Long, ObservableSource<WeatherEntity>>() {
 
             @Override
             public ObservableSource<WeatherEntity> apply(Long aLong) throws Exception {
@@ -119,32 +117,36 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private Observable<Long> getCityObservable() {
-        return Observable.create(new ObservableOnSubscribe<Long>() {
+        if (mCityPublish == null) {
+            mCityPublish = Observable.create(new ObservableOnSubscribe<Long>() {
 
-            @Override
-            public void subscribe(ObservableEmitter<Long> observableEmitter) throws Exception {
-                try {
-                    for (int i = 0; i < CITY_ARRAY.length; i++) {
-                        Thread.sleep(5000);
-                        Log.d(TAG, "定位到城市信息=" + CITY_ARRAY[i]);
-                        observableEmitter.onNext(CITY_ARRAY[i]);
-                    }
-                } catch (InterruptedException e) {
-                    if (!observableEmitter.isDisposed()) {
-                        observableEmitter.onError(e);
+                @Override
+                public void subscribe(ObservableEmitter<Long> observableEmitter) throws Exception {
+                    try {
+                        for (int i = 0; i < CITY_ARRAY.length; i++) {
+                            Thread.sleep(5000);
+                            Log.d(TAG, "定位到城市信息=" + CITY_ARRAY[i]);
+                            observableEmitter.onNext(CITY_ARRAY[i]);
+                        }
+                    } catch (InterruptedException e) {
+                        if (!observableEmitter.isDisposed()) {
+                            observableEmitter.onError(e);
+                        }
                     }
                 }
-            }
 
-        }).distinctUntilChanged().doOnNext(new Consumer<Long>() {
+            }).distinctUntilChanged().doOnNext(new Consumer<Long>() {
 
-            @Override
-            public void accept(Long aLong) throws Exception {
-                Log.d(TAG, "存储城市信息=" + aLong + ",threadId=" + Thread.currentThread().getId());
-                saveCacheCity(aLong);
-            }
+                @Override
+                public void accept(Long aLong) throws Exception {
+                    Log.d(TAG, "存储城市信息=" + aLong + ",threadId=" + Thread.currentThread().getId());
+                    saveCacheCity(aLong);
+                }
 
-        }).subscribeOn(Schedulers.io());
+            }).subscribeOn(Schedulers.io()).publish();
+            mCityPublish.connect();
+        }
+        return mCityPublish;
     }
 
     private Observable<Long> getNetStatusObservable() {
@@ -160,10 +162,10 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public ObservableSource<Long> apply(Boolean aBoolean) throws Exception {
                 Log.d(TAG, "网络连接发生变化，缓存城市信息=" + aBoolean);
-                return Observable.just(getCacheCity()).subscribeOn(Schedulers.io());
+                return Observable.just(getCacheCity());
             }
 
-        });
+        }).subscribeOn(Schedulers.io());
     }
 
     private Observable<WeatherEntity> getWeather(long cityId) {
