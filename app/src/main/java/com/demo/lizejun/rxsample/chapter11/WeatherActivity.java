@@ -18,8 +18,6 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import java.net.UnknownHostException;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,7 +26,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import retrofit2.Retrofit;
@@ -47,7 +44,7 @@ public class WeatherActivity extends AppCompatActivity {
     private CompositeDisposable mCompositeDisposable;
     private TextView mTvNetworkResult;
     private PublishSubject<Boolean> mNetStatusPublish;
-    private ConnectableObservable<Long> mCityPublish;
+    private PublishSubject<Long> mCityPublish;
     private BroadcastReceiver mReceiver;
     private long mCacheCity = -1;
 
@@ -57,13 +54,15 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detector);
         mTvNetworkResult = (TextView) findViewById(R.id.tv_network_result);
         mNetStatusPublish = PublishSubject.create();
+        mCityPublish = PublishSubject.create();
         mCompositeDisposable = new CompositeDisposable();
         registerBroadcast();
-        startWeatherObserver();
+        startUpdateLocation();
+        startUpdateWeather();
     }
 
-    private void startWeatherObserver() {
-        Observable.merge(getCityObservable(), getNetStatusObservable()).flatMap(new Function<Long, ObservableSource<WeatherEntity>>() {
+    private void startUpdateWeather() {
+        Observable.merge(getCityPublish(), getNetStatusPublish()).flatMap(new Function<Long, ObservableSource<WeatherEntity>>() {
 
             @Override
             public ObservableSource<WeatherEntity> apply(Long aLong) throws Exception {
@@ -116,40 +115,18 @@ public class WeatherActivity extends AppCompatActivity {
         });
     }
 
-    private Observable<Long> getCityObservable() {
-        if (mCityPublish == null) {
-            mCityPublish = Observable.create(new ObservableOnSubscribe<Long>() {
+    private Observable<Long> getCityPublish() {
+        return mCityPublish.distinctUntilChanged().doOnNext(new Consumer<Long>() {
 
-                @Override
-                public void subscribe(ObservableEmitter<Long> observableEmitter) throws Exception {
-                    try {
-                        for (int i = 0; i < CITY_ARRAY.length; i++) {
-                            Thread.sleep(5000);
-                            Log.d(TAG, "定位到城市信息=" + CITY_ARRAY[i]);
-                            observableEmitter.onNext(CITY_ARRAY[i]);
-                        }
-                    } catch (InterruptedException e) {
-                        if (!observableEmitter.isDisposed()) {
-                            observableEmitter.onError(e);
-                        }
-                    }
-                }
+            @Override
+            public void accept(Long aLong) throws Exception {
+                saveCacheCity(aLong);
+            }
 
-            }).distinctUntilChanged().doOnNext(new Consumer<Long>() {
-
-                @Override
-                public void accept(Long aLong) throws Exception {
-                    Log.d(TAG, "存储城市信息=" + aLong + ",threadId=" + Thread.currentThread().getId());
-                    saveCacheCity(aLong);
-                }
-
-            }).subscribeOn(Schedulers.io()).publish();
-            mCityPublish.connect();
-        }
-        return mCityPublish;
+        });
     }
 
-    private Observable<Long> getNetStatusObservable() {
+    private Observable<Long> getNetStatusPublish() {
         return mNetStatusPublish.filter(new Predicate<Boolean>() {
 
             @Override
@@ -175,6 +152,25 @@ public class WeatherActivity extends AppCompatActivity {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(WeatherApi.class);
         return api.getWeather(cityId);
+    }
+
+    private void startUpdateLocation() {
+        new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    for (long cityId : CITY_ARRAY) {
+                        Thread.sleep(5000);
+                        Log.d(TAG, "定位到城市信息=" + cityId);
+                        mCityPublish.onNext(cityId);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }.start();
     }
 
     private void registerBroadcast() {
