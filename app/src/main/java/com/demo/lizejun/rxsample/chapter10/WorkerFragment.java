@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -18,8 +16,8 @@ public class WorkerFragment extends Fragment {
 
     public static final String TAG = WorkerFragment.class.getName();
 
-    private ConnectableObservable<Long> mConnectObservable; //用于Worker和Holder的连接。
-    private Disposable mConnectDisposable;
+    private ConnectableObservable<String> mWorker;
+    private Disposable mDisposable;
     private IHolder mHolder;
 
     @Override
@@ -34,43 +32,52 @@ public class WorkerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        if (mConnectObservable != null) {
+        if (mWorker != null) {
             return;
         }
-        Observable<Long> sourceObservable = Observable.create(new ObservableOnSubscribe<Long>() {
+        Bundle bundle = getArguments();
+        final String taskName = (bundle != null ? bundle.getString("task_name") : null);
+        mWorker = Observable.create(new ObservableOnSubscribe<String>() {
 
             @Override
-            public void subscribe(ObservableEmitter<Long> e) throws Exception {
-                for (long i = 0; i < 100; i++) {
+            public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
+
+                for (int i = 0; i < 10; i++) {
+                    String message = "任务名称=" + taskName + ", 任务进度=" + i * 10 + "%";
                     try {
+                        Log.d(TAG, message);
                         Thread.sleep(1000);
+                        //如果已经抛弃，那么不再继续任务。
+                        if (observableEmitter.isDisposed()) {
+                            break;
+                        }
                     } catch (InterruptedException error) {
-                        if (!e.isDisposed()) {
-                            e.onError(error);
+                        if (!observableEmitter.isDisposed()) {
+                            observableEmitter.onError(error);
                         }
                     }
-                    e.onNext(i);
+                    observableEmitter.onNext(message);
                 }
-                e.onComplete();
+                observableEmitter.onComplete();
             }
 
-        }).subscribeOn(Schedulers.io());
-        mConnectObservable = sourceObservable.publish();
-        mConnectDisposable = mConnectObservable.connect();
+        }).subscribeOn(Schedulers.io()).publish();
+        mDisposable = mWorker.connect();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (mHolder != null) {
-            mHolder.onWorkerPrepared(mConnectObservable);
+            mHolder.onWorkerPrepared(mWorker);
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mConnectDisposable.dispose();
+        mDisposable.dispose();
+        Log.d(TAG, "onDestroy");
     }
 
     @Override
