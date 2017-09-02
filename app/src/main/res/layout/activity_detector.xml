@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.demo.lizejun.rxsample.chapter11.DetectorActivity">
+    tools:context="com.demo.lizejun.rxsample.chapter11.WeatherActivity">
     <TextView
         android:id="@+id/tv_network_result"
-        android:gravity="center"
+        android:lineSpacingExtra="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>
