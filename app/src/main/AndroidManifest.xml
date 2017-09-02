@@ -3,6 +3,7 @@
     package="com.demo.lizejun.rxsample">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +28,8 @@
         <activity android:name=".chapter7.CombineLatestActivity" />
         <activity android:name=".chapter8.CacheActivity" />
         <activity android:name=".chapter9.TimeActivity" />
-        <activity android:name=".chapter10.RotationPersistActivity"></activity>
+        <activity android:name=".chapter10.RotationPersistActivity" />
+        <activity android:name=".chapter11.DetectorActivity"/>
     </application>
 
 </manifest>
