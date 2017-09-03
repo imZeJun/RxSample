@@ -29,7 +29,8 @@
         <activity android:name=".chapter8.CacheActivity" />
         <activity android:name=".chapter9.TimeActivity" />
         <activity android:name=".chapter10.RotationPersistActivity" />
-        <activity android:name=".chapter11.WeatherActivity"/>
+        <activity android:name=".chapter11.WeatherActivity" />
+        <activity android:name=".chapter12.HotObservableActivity"></activity>
     </application>
 
 </manifest>

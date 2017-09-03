@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(9) 用 timer/interval/delay 完全替代 TimerTask");
         titles.add("(10) 在屏幕旋转导致 Activity 重建时，保持数据");
         titles.add("(11) 使用 distinctUntilChanged 检测网络状态变化");
+        titles.add("(12) Cold & HotObservable 的例子");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);

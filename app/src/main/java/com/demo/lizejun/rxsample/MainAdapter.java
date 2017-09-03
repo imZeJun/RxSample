@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.demo.lizejun.rxsample.chapter1.DownloadActivity;
 import com.demo.lizejun.rxsample.chapter10.RotationPersistActivity;
 import com.demo.lizejun.rxsample.chapter11.WeatherActivity;
+import com.demo.lizejun.rxsample.chapter12.HotObservableActivity;
 import com.demo.lizejun.rxsample.chapter2.BufferActivity;
 import com.demo.lizejun.rxsample.chapter3.SearchActivity;
 import com.demo.lizejun.rxsample.chapter4.NewsActivity;
@@ -81,6 +82,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                     case 10:
                         Utils.startActivity(v.getContext(), WeatherActivity.class);
                         break;
+                    case 11:
+                        Utils.startActivity(v.getContext(), HotObservableActivity.class);
                     default:
                         break;
                 }
