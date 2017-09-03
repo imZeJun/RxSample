@@ -47,6 +47,7 @@ public class WeatherActivity extends AppCompatActivity {
     private PublishSubject<Long> mCityPublish;
     private BroadcastReceiver mReceiver;
     private long mCacheCity = -1;
+    private Thread mLocationThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public ObservableSource<?> apply(Throwable throwable) throws Exception {
                         Log.d(TAG, "请求天气信息过程中发生错误，进行重订阅");
-                        return throwable instanceof UnknownHostException ? Observable.just(0) : Observable.empty();
+                        return Observable.just(0);
                     }
 
                 });
@@ -134,12 +135,11 @@ public class WeatherActivity extends AppCompatActivity {
                 return aBoolean && getCacheCity() > 0;
             }
 
-        }).flatMap(new Function<Boolean, ObservableSource<Long>>() {
+        }).map(new Function<Boolean, Long>() {
 
             @Override
-            public ObservableSource<Long> apply(Boolean aBoolean) throws Exception {
-                Log.d(TAG, "网络连接发生变化，缓存城市信息=" + aBoolean);
-                return Observable.just(getCacheCity());
+            public Long apply(Boolean aBoolean) throws Exception {
+                return getCacheCity();
             }
 
         }).subscribeOn(Schedulers.io());
@@ -154,24 +154,36 @@ public class WeatherActivity extends AppCompatActivity {
         return api.getWeather(cityId);
     }
 
+    //模拟定位模块的回调。
     private void startUpdateLocation() {
-        new Thread() {
+        mLocationThread = new Thread() {
 
             @Override
             public void run() {
-                try {
-                    for (long cityId : CITY_ARRAY) {
-                        Thread.sleep(5000);
-                        Log.d(TAG, "定位到城市信息=" + cityId);
-                        mCityPublish.onNext(cityId);
+                //示例一：
+                while (true) {
+                    try {
+                        for (long cityId : CITY_ARRAY) {
+                            if (isInterrupted()) {
+                                break;
+                            }
+                            Log.d(TAG, "重新定位");
+                            Thread.sleep(1000);
+                            Log.d(TAG, "定位到城市信息=" + cityId);
+                            mCityPublish.onNext(cityId);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+                //示例二：
+                //mCityPublish.onNext(CITY_ARRAY[0]);
             }
 
-        }.start();
+        };
+        mLocationThread.start();
     }
+
 
     private void registerBroadcast() {
         mReceiver = new BroadcastReceiver() {
@@ -209,6 +221,7 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mLocationThread.interrupt();
         unRegisterBroadcast();
         mCompositeDisposable.clear();
     }
