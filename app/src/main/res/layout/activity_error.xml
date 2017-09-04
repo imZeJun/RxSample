@@ -4,12 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.demo.lizejun.rxsample.chapter13.ErrorResumeActivity">
+    tools:context="com.demo.lizejun.rxsample.chapter13.ErrorActivity">
     <Button
         android:id="@+id/bt_publish"
         android:text="发送事件"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"/>
     <TextView
         android:id="@+id/tv_subscribe_1"
         android:layout_width="match_parent"
@@ -17,5 +17,5 @@
     <TextView
         android:id="@+id/tv_subscribe_2"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"/>
 </LinearLayout>

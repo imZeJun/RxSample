@@ -31,7 +31,7 @@
         <activity android:name=".chapter10.RotationPersistActivity" />
         <activity android:name=".chapter11.WeatherActivity" />
         <activity android:name=".chapter12.HotObservableActivity" />
-        <activity android:name=".chapter13.ErrorResumeActivity"></activity>
+        <activity android:name=".chapter13.ErrorActivity"></activity>
     </application>
 
 </manifest>

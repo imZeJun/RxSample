@@ -10,7 +10,7 @@ import com.demo.lizejun.rxsample.chapter1.DownloadActivity;
 import com.demo.lizejun.rxsample.chapter10.RotationPersistActivity;
 import com.demo.lizejun.rxsample.chapter11.WeatherActivity;
 import com.demo.lizejun.rxsample.chapter12.HotObservableActivity;
-import com.demo.lizejun.rxsample.chapter13.ErrorResumeActivity;
+import com.demo.lizejun.rxsample.chapter13.ErrorActivity;
 import com.demo.lizejun.rxsample.chapter2.BufferActivity;
 import com.demo.lizejun.rxsample.chapter3.SearchActivity;
 import com.demo.lizejun.rxsample.chapter4.NewsActivity;
@@ -87,7 +87,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         Utils.startActivity(v.getContext(), HotObservableActivity.class);
                         break;
                     case 12:
-                        Utils.startActivity(v.getContext(), ErrorResumeActivity.class);
+                        Utils.startActivity(v.getContext(), ErrorActivity.class);
                         break;
                     default:
                         break;
