@@ -97,10 +97,10 @@ public class HotObservableActivity extends AppCompatActivity {
 
     private void createObservable() {
         //createColdSource(); //(1)订阅到cold;
-        createPublishSource(); //(2)订阅到cold.publish();
+        //createPublishSource(); //(2)订阅到cold.publish();
         //createShareSource(); //(3)订阅到cold.share();
         //createAutoConnectSource(); //(4)订阅到cold.publish().autoConnect(2);
-        //createReplySource(); //(5)订阅到cold.reply(3);
+        createReplySource(); //(5)订阅到cold.reply(3);
     }
 
     //直接订阅Cold Observable。
@@ -118,13 +118,13 @@ public class HotObservableActivity extends AppCompatActivity {
     //.share()相当于.publish().refCount()，当有订阅者订阅时，源订阅者会开始发送数据，如果所有的订阅者都取消订阅，源Observable就会停止发送数据。
     private void createShareSource() {
         mColdObservable = getSource();
-        mConvertObservable = mColdObservable.share();
+        mConvertObservable = mColdObservable.publish().refCount();
     }
 
     //.autoConnect在有指定个订阅者时开始让源Observable发送消息，但是订阅者是否取消订阅不会影响到源Observable的发射。
     private void createAutoConnectSource() {
         mColdObservable = getSource();
-        mConvertObservable = mColdObservable.publish().autoConnect(2, new Consumer<Disposable>() {
+        mConvertObservable = mColdObservable.publish().autoConnect(1, new Consumer<Disposable>() {
             @Override
             public void accept(Disposable disposable) throws Exception {
                 mConvertDisposable = disposable;

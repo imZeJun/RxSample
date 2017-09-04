@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(10) 在屏幕旋转导致 Activity 重建时，保持数据");
         titles.add("(11) 使用 distinctUntilChanged 检测网络状态变化");
         titles.add("(12) Cold & HotObservable 的例子");
+        titles.add("(13) 防止异常导致事件流结束");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);
