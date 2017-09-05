@@ -10,7 +10,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.internal.disposables.DisposableHelper;
 import io.reactivex.plugins.RxJavaPlugins;
 
-public final class LambdaObserver<T> extends AtomicReference<Disposable> implements Observer<T>, Disposable {
+public final class IgnoreErrorLambdaObserver<T> extends AtomicReference<Disposable> implements Observer<T>, Disposable {
 
     private static final long serialVersionUID = -7251123623727029452L;
     final Consumer<? super T> onNext;
@@ -18,7 +18,7 @@ public final class LambdaObserver<T> extends AtomicReference<Disposable> impleme
     final Action onComplete;
     final Consumer<? super Disposable> onSubscribe;
 
-    public LambdaObserver(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe) {
+    public IgnoreErrorLambdaObserver(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe) {
         super();
         this.onNext = onNext;
         this.onError = onError;
