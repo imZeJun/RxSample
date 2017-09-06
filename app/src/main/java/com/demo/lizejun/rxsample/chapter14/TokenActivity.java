@@ -61,18 +61,17 @@ public class TokenActivity extends AppCompatActivity {
                 return Observable.just(cacheToken);
             }
         }).flatMap(new Function<String, ObservableSource<String>>() {
-            
             @Override
             public ObservableSource<String> apply(String token) throws Exception {
                 return getUserObservable(index, token);
             }
-
         }).retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+
+            private int mRetryCount = 0;
+
             @Override
             public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
                 return throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
-
-                    private int mRetryCount = 0;
 
                     @Override
                     public ObservableSource<?> apply(Throwable throwable) throws Exception {
