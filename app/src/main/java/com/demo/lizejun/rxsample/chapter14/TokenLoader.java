@@ -2,6 +2,8 @@ package com.demo.lizejun.rxsample.chapter14;
 
 import android.util.Log;
 import com.demo.lizejun.rxsample.utils.Store;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -16,7 +18,7 @@ public class TokenLoader {
 
     private static final String TAG = TokenLoader.class.getSimpleName();
 
-    private AtomicInteger mRefreshing = new AtomicInteger(1);
+    private AtomicBoolean mRefreshing = new AtomicBoolean(false);
     private PublishSubject<String> mPublishSubject;
     private Observable<String> mTokenObservable;
 
@@ -34,12 +36,12 @@ public class TokenLoader {
             public void accept(String token) throws Exception {
                 Log.d(TAG, "存储Token=" + token);
                 Store.getInstance().setToken(token);
-                mRefreshing.getAndIncrement();
+                mRefreshing.set(false);
             }
         }).doOnError(new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                mRefreshing.getAndIncrement();
+                mRefreshing.set(false);
             }
         }).subscribeOn(Schedulers.io());
     }
@@ -57,9 +59,8 @@ public class TokenLoader {
     }
 
     public Observable<String> getNetTokenLocked() {
-        if (mRefreshing.get() == 1) {
+        if (mRefreshing.compareAndSet(false, true)) {
             Log.d(TAG, "没有请求，发起一次新的Token请求");
-            mRefreshing.getAndDecrement();
             startTokenRequest();
         } else {
             Log.d(TAG, "已经有请求，直接返回等待");

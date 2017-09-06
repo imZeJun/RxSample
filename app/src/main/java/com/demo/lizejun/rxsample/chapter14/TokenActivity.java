@@ -3,9 +3,11 @@ package com.demo.lizejun.rxsample.chapter14;
 import android.content.pm.ProviderInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.demo.lizejun.rxsample.R;
 import com.demo.lizejun.rxsample.utils.Store;
@@ -114,8 +116,7 @@ public class TokenActivity extends AppCompatActivity {
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 Log.d(TAG, index + "使用token=" + token + "发起请求");
                 //模拟根据Token去请求信息的过程。
-                long tokeTime = Long.valueOf(token);
-                if (System.currentTimeMillis() - tokeTime < 2000) {
+                if (!TextUtils.isEmpty(token) && System.currentTimeMillis() - Long.valueOf(token) < 2000) {
                     e.onNext(index + ":" + token + "的用户信息");
                 } else {
                     e.onError(new Throwable(ERROR_TOKEN));
