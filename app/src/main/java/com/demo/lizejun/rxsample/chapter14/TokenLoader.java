@@ -1,13 +1,14 @@
 package com.demo.lizejun.rxsample.chapter14;
 
 import android.util.Log;
-
 import com.demo.lizejun.rxsample.utils.Store;
 import java.util.concurrent.atomic.AtomicInteger;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.functions.Consumer;
+import io.reactivex.internal.observers.BlockingObserver;
+import io.reactivex.internal.operators.flowable.BlockingFlowableNext;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
@@ -17,9 +18,30 @@ public class TokenLoader {
 
     private AtomicInteger mRefreshing = new AtomicInteger(1);
     private PublishSubject<String> mPublishSubject;
+    private Observable<String> mTokenObservable;
 
     private TokenLoader() {
         mPublishSubject = PublishSubject.create();
+        mTokenObservable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                Thread.sleep(1000);
+                Log.d(TAG, "发送Token");
+                e.onNext(String.valueOf(System.currentTimeMillis()));
+            }
+        }).doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String token) throws Exception {
+                Log.d(TAG, "存储Token=" + token);
+                Store.getInstance().setToken(token);
+                mRefreshing.getAndIncrement();
+            }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                mRefreshing.getAndIncrement();
+            }
+        }).subscribeOn(Schedulers.io());
     }
 
     public static TokenLoader getInstance() {
@@ -46,34 +68,7 @@ public class TokenLoader {
     }
 
     private void startTokenRequest() {
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> e) throws Exception {
-                Thread.sleep(1000);
-                Log.d(TAG, "发送Token");
-                e.onNext(String.valueOf(System.currentTimeMillis()));
-            }
-        }).subscribeOn(Schedulers.io()).subscribe(new DisposableObserver<String>() {
-            @Override
-            public void onNext(String value) {
-                Log.d(TAG, "返回Token结果=" + value);
-                mRefreshing.getAndIncrement();
-                Store.getInstance().setToken(value);
-                mPublishSubject.onNext(value);
-            }
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "返回Token错误");
-                mRefreshing.getAndIncrement();
-                mPublishSubject.onError(e);
-            }
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "返回Token完成");
-                mRefreshing.getAndIncrement();
-                mPublishSubject.onComplete();
-            }
-        });
+        mTokenObservable.subscribe(mPublishSubject);
     }
 
 }
