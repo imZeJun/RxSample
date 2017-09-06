@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(11) 使用 distinctUntilChanged 检测网络状态变化");
         titles.add("(12) Cold & HotObservable 的例子");
         titles.add("(13) 防止异常导致事件流结束");
+        titles.add("(14) 获取Token");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);
