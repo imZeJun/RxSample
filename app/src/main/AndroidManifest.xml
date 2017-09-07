@@ -33,7 +33,8 @@
         <activity android:name=".chapter11.WeatherActivity" />
         <activity android:name=".chapter12.HotObservableActivity" />
         <activity android:name=".chapter13.ErrorActivity" />
-        <activity android:name=".chapter14.TokenActivity"></activity>
+        <activity android:name=".chapter14.TokenActivity" />
+        <activity android:name=".chapter15.UsingActivity"></activity>
     </application>
 
 </manifest>
