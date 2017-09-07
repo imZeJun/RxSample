@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.demo.lizejun.rxsample.chapter14.TokenActivity">
     <Button
-        android:id="@+id/bt_request"
+        android:id="@+id/bt_request_observable"
+        android:text="使用Observable+Observer"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/bt_request_flow"
+        android:layout_marginTop="10dp"
+        android:text="使用Flow+Subscriber"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+</LinearLayout>
