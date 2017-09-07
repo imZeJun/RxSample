@@ -15,4 +15,8 @@
         android:text="查询"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
