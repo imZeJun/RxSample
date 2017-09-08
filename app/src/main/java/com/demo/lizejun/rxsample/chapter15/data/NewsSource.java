@@ -6,4 +6,6 @@ import io.reactivex.Observable;
 public interface NewsSource {
 
     Observable<NewsEntity> getNews(String category);
+
+    void saveNews(NewsEntity newsEntity);
 }

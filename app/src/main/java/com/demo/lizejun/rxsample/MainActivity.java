@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         titles.add("(12) Cold & HotObservable 的例子");
         titles.add("(13) 防止异常导致事件流结束");
         titles.add("(14) 获取Token");
-        titles.add("(15) 使用Using操作符");
+        titles.add("(15) MVP 示例");
+        titles.add("(16) 使用Using操作符");
         MainAdapter mainAdapter = new MainAdapter(titles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);
