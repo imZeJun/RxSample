@@ -34,7 +34,8 @@
         <activity android:name=".chapter12.HotObservableActivity" />
         <activity android:name=".chapter13.ErrorActivity" />
         <activity android:name=".chapter14.TokenActivity" />
-        <activity android:name=".chapter15.UsingActivity"></activity>
+        <activity android:name=".chapter16.UsingActivity" />
+        <activity android:name=".chapter15.MVPActivity"></activity>
     </application>
 
 </manifest>

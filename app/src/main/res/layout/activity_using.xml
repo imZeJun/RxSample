@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.demo.lizejun.rxsample.chapter15.UsingActivity">
+    tools:context="com.demo.lizejun.rxsample.chapter16.UsingActivity">
     <Button
         android:id="@+id/bt_insert"
         android:text="插入"
