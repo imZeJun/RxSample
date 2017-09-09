@@ -7,62 +7,65 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
 import com.demo.lizejun.rxsample.R;
-import com.demo.lizejun.rxsample.network.entity.NewsEntity;
-import com.demo.lizejun.rxsample.network.entity.NewsResultEntity;
+import com.demo.lizejun.rxsample.chapter15.data.bean.NewsBean;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsMvpActivity extends AppCompatActivity implements NewsMvpContract.View {
 
-
+    private CoordinatorLayout mRootLayout;
     private RecyclerView mRecyclerView;
     private NewsMvpAdapter mRecyclerAdapter;
-    private NewsEntity mNewsEntity = new NewsEntity();
+    private List<NewsBean> mNewsBeans = new ArrayList<>();
     private NewsMvpContract.Presenter mPresenter;
-    private TextView mTipsView;
+    private LinearLayoutManager mLayoutMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_mvp);
         initView();
+        dispatchRefresh(NewsMvpContract.REFRESH_CACHE);
     }
 
     private void initView() {
+        mRootLayout = (CoordinatorLayout) findViewById(R.id.cl_root);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_news);
-        mTipsView = (TextView) findViewById(R.id.tv_loading);
         mRecyclerAdapter = new NewsMvpAdapter();
-        mRecyclerAdapter.setNewsResult(mNewsEntity);
-        LinearLayoutManager layoutMgr = new LinearLayoutManager(this);
+        mRecyclerAdapter.setNewsResult(mNewsBeans);
+        mLayoutMgr = new LinearLayoutManager(this);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.setLayoutManager(layoutMgr);
+        mRecyclerView.setLayoutManager(mLayoutMgr);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mPresenter = new NewsPresenter(this);
-        mPresenter.loadNews(true);
     }
 
     @Override
-    public void showLoadingIndicator(boolean loading) {
-        if (loading) {
-            mRecyclerView.setVisibility(View.GONE);
-            mTipsView.setVisibility(View.VISIBLE);
-            mTipsView.setText("正在加载...");
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mTipsView.setVisibility(View.GONE);
-        }
+    protected void onResume() {
+        super.onResume();
+        dispatchRefresh(NewsMvpContract.REFRESH_AUTO);
+    }
+
+    private void dispatchRefresh(@NewsMvpContract.RefreshType int refreshType) {
+        mPresenter.refresh(refreshType);
     }
 
     @Override
-    public void showNews(NewsEntity newsEntity) {
-        mNewsEntity.setError(newsEntity.isError());
-        List<NewsResultEntity> newResults = newsEntity.getResults();
-        mNewsEntity.getResults().clear();
-        mNewsEntity.getResults().addAll(newResults);
+    public void onRefreshFinished(@NewsMvpContract.RefreshType int refreshType, List<NewsBean> newsBeans) {
+        mNewsBeans.clear();
+        mNewsBeans.addAll(newsBeans);
         mRecyclerAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showTips(String message) {
+        Snackbar.make(mRootLayout, message, Snackbar.LENGTH_SHORT).show();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
 }

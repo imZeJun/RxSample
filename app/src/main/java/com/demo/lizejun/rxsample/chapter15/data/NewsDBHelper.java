@@ -1,8 +1,10 @@
-package com.demo.lizejun.rxsample.chapter15.data.local;
+package com.demo.lizejun.rxsample.chapter15.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.demo.lizejun.rxsample.chapter15.data.NewsContract;
 
 public class NewsDBHelper extends SQLiteOpenHelper {
 

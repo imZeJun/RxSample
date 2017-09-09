@@ -5,6 +5,7 @@ import java.util.List;
 
 public class NewsEntity {
 
+    private long updateTime;
     private boolean error;
     private List<NewsResultEntity> results = new ArrayList<>();
 
@@ -22,5 +23,13 @@ public class NewsEntity {
 
     public void setResults(List<NewsResultEntity> results) {
         this.results = results;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 }

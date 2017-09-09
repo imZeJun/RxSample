@@ -1,4 +1,4 @@
-package com.demo.lizejun.rxsample.chapter15.data.local;
+package com.demo.lizejun.rxsample.chapter15.data;
 
 import android.provider.BaseColumns;
 

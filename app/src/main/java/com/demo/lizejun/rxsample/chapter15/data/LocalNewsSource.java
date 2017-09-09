@@ -1,24 +1,20 @@
-package com.demo.lizejun.rxsample.chapter15.data.local;
+package com.demo.lizejun.rxsample.chapter15.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.alibaba.fastjson.JSON;
-import com.demo.lizejun.rxsample.chapter15.data.NewsSource;
 import com.demo.lizejun.rxsample.network.entity.NewsEntity;
 import com.demo.lizejun.rxsample.utils.Utils;
 
-import java.util.Observer;
-
 import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class LocalNewsSource implements NewsSource {
+public class LocalNewsSource {
 
     private static final String[] QUERY_PROJECTION = new String[] { NewsContract.NewsTable.COLUMN_NAME_DATA };
     private static final String QUERY_SELECTION = NewsContract.NewsTable.COLUMN_NAME_CATEGORY + "= ?";
@@ -31,7 +27,6 @@ public class LocalNewsSource implements NewsSource {
         mSQLiteDatabase = mNewsDBHelper.getWritableDatabase();
     }
 
-    @Override
     public Observable<NewsEntity> getNews(String category) {
         return Observable.just(category).flatMap(new Function<String, ObservableSource<NewsEntity>>() {
             @Override
@@ -50,7 +45,7 @@ public class LocalNewsSource implements NewsSource {
         });
     }
 
-    @Override
+
     public void saveNews(NewsEntity newsEntity) {
         Observable.just(newsEntity).observeOn(Schedulers.io()).subscribe(new Consumer<NewsEntity>() {
 

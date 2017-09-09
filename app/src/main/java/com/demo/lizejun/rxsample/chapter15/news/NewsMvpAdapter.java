@@ -7,15 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.demo.lizejun.rxsample.R;
-import com.demo.lizejun.rxsample.network.entity.NewsEntity;
-import com.demo.lizejun.rxsample.network.entity.NewsResultEntity;
+import com.demo.lizejun.rxsample.chapter15.data.bean.NewsBean;
+
 import java.util.List;
 
 public class NewsMvpAdapter extends RecyclerView.Adapter<NewsMvpAdapter.NewsMvpHolder> {
 
 
-    private NewsEntity mNewsEntity;
+    private List<NewsBean> mNewsEntity;
 
     @Override
     public NewsMvpHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -25,21 +26,20 @@ public class NewsMvpAdapter extends RecyclerView.Adapter<NewsMvpAdapter.NewsMvpH
     @Override
     public void onBindViewHolder(NewsMvpHolder holder, int position) {
         if (mNewsEntity != null) {
-            List<NewsResultEntity> mNewsResult = mNewsEntity.getResults();
-            if (mNewsResult != null) {
-                NewsResultEntity resultEntity = mNewsResult.get(position);
+            NewsBean newsBean = mNewsEntity.get(position);
+            if (newsBean != null) {
                 TextView titleView = holder.getView(R.id.tv_title);
-                titleView.setText("[" + resultEntity.getType() + "] " + resultEntity.getDesc() + " -- " + resultEntity.getWho());
+                titleView.setText(newsBean.getTitle());
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return mNewsEntity != null ? mNewsEntity.getResults() != null ? mNewsEntity.getResults().size() : 0 : 0;
+        return mNewsEntity != null ? mNewsEntity.size() : 0;
     }
 
-    public void setNewsResult(NewsEntity newsEntity) {
+    public void setNewsResult(List<NewsBean> newsEntity) {
         mNewsEntity = newsEntity;
     }
 

@@ -1,20 +1,25 @@
 package com.demo.lizejun.rxsample.chapter15.news;
 
-import com.demo.lizejun.rxsample.chapter15.BasePresenter;
-import com.demo.lizejun.rxsample.chapter15.BaseView;
-import com.demo.lizejun.rxsample.network.entity.NewsEntity;
+import android.support.annotation.IntDef;
+import com.demo.lizejun.rxsample.chapter15.data.bean.NewsBean;
+import java.util.List;
 
 public class NewsMvpContract {
 
-    public interface View extends BaseView {
+    public static final int REFRESH_AUTO = 0;
+    public static final int REFRESH_CACHE = 1;
 
-        void showLoadingIndicator(boolean loading);
+    @IntDef ({REFRESH_AUTO, REFRESH_CACHE})
+    public @interface RefreshType {}
 
-        void showNews(NewsEntity newsEntity);
+    public interface View {
+        void onRefreshFinished(@RefreshType int refreshType, List<NewsBean> newsEntity);
+        void showTips(String message);
     }
 
-    public interface Presenter extends BasePresenter {
-        void loadNews(boolean loadCache);
+    public interface Presenter {
+        void refresh(@RefreshType int refreshType);
+        void destroy();
     }
 
 }
