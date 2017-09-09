@@ -151,14 +151,24 @@ public class CacheActivity extends AppCompatActivity {
                         entity.setDesc("序号=" + i);
                         results.add(entity);
                     }
+                    //a.正常情况。
                     observableEmitter.onNext(results);
                     observableEmitter.onComplete();
+                    //b.发生异常。
+                    //observableEmitter.onError(new Throwable("netWork Error"));
                     Log.d(TAG, "结束加载网络数据");
                 } catch (InterruptedException e) {
                     if (!observableEmitter.isDisposed()) {
                         observableEmitter.onError(e);
                     }
                 }
+            }
+        }).onErrorResumeNext(new Function<Throwable, ObservableSource<? extends List<NewsResultEntity>>>() {
+
+            @Override
+            public ObservableSource<? extends List<NewsResultEntity>> apply(Throwable throwable) throws Exception {
+                Log.d(TAG, "网络请求发生错误throwable=" + throwable);
+                return Observable.never();
             }
         });
     }

@@ -1,7 +1,5 @@
 package com.demo.lizejun.rxsample.chapter15.data.bean;
 
-import android.text.TextUtils;
-
 import java.util.Objects;
 
 public class NewsBean {
